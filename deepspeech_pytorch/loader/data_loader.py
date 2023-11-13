@@ -180,7 +180,10 @@ class ChunkSpectrogramParser(AudioParser):
         super(ChunkSpectrogramParser, self).__init__(audio_conf, normalize)
 
     def parse_audio(self, audio_path, chunk_size_seconds=-1):
-        y = load_audio(audio_path)
+        if isinstance(audio_path, np.ndarray):
+            y = audio_path
+        else:
+            y = load_audio(audio_path)
         for y_chunk in self.get_chunks(y, chunk_size_seconds):
             spect = self.compute_spectrogram(y_chunk)
             yield spect
